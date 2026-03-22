@@ -10,6 +10,7 @@ import { toast } from "sonner";
 const PHONE_NUMBER = "+1 (817)-506-9696";
 const PHONE_HREF = "tel:+18175069696";
 const FORM_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/qTrXc3AYUYHnooyh3gIB/webhook-trigger/c26b38d9-061a-40fb-91ad-0990cfa7ca2b";
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/m06telzz_logolp.png";
 
 // GTM DataLayer helper
 const pushToDataLayer = (event, data = {}) => {
@@ -163,24 +164,29 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* White Navbar */}
+      <nav className="bg-white shadow-md sticky top-0 z-50" data-testid="navbar">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-2 flex items-center justify-between">
+          <img 
+            src={LOGO_URL} 
+            alt="Apex Bath & Remodeling Pros" 
+            className="h-16 md:h-20 w-auto"
+          />
+          <button
+            onClick={handleCallClick}
+            data-testid="header-call-button"
+            className="btn-cta flex items-center gap-2 text-sm md:text-base"
+          >
+            <Phone className="w-4 h-4 md:w-5 md:h-5" />
+            <span className="hidden sm:inline">{PHONE_NUMBER}</span>
+            <span className="sm:hidden">Call Now</span>
+          </button>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <section className="hero-section relative" data-testid="hero-section">
         <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-16">
-          {/* Top Bar */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 md:mb-12">
-            <div>
-              <h2 className="text-white text-xl md:text-2xl font-bold tracking-tight">Apex Bath Remodeling Pros</h2>
-              <p className="text-white/80 text-sm">Serving Dallas–Fort Worth & North Central Texas</p>
-            </div>
-            <button
-              onClick={handleCallClick}
-              data-testid="header-call-button"
-              className="btn-cta flex items-center gap-2 text-base"
-            >
-              <Phone className="w-5 h-5" />
-              <span>{PHONE_NUMBER}</span>
-            </button>
-          </div>
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Column - Content */}
