@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 const PHONE_NUMBER = "+1 (817)-506-9696";
 const PHONE_HREF = "tel:+18175069696";
+const BOOKING_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/qTrXc3AYUYHnooyh3gIB/webhook-trigger/ec2c733f-2f4d-4ab5-94f1-f8b1ad1b8b41";
 
 // GTM DataLayer helper
 const pushToDataLayer = (event, data = {}) => {
@@ -61,7 +62,12 @@ export default function BookingPage() {
   }, []);
 
   const handleCallClick = () => {
-    pushToDataLayer("click_call_button", { phone_number: PHONE_NUMBER, page: "booking" });
+    pushToDataLayer("click_call_button", {
+      event_category: "Engagement",
+      event_label: "Click to Call",
+      phone_number: PHONE_NUMBER,
+      page: "booking",
+    });
     window.location.href = PHONE_HREF;
   };
 
@@ -74,15 +80,33 @@ export default function BookingPage() {
     setIsBooking(true);
 
     try {
-      // Push GTM event
+      // Send to webhook
+      await fetch(BOOKING_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: leadData?.name || "",
+          phone: leadData?.phone || "",
+          email: leadData?.email || "",
+          zipCode: leadData?.zipCode || "",
+          projectType: leadData?.projectType || "",
+          appointmentDate: selectedDay.fullDate,
+          appointmentTime: selectedTime,
+          source: "apex-bath-landing-page",
+          formType: "booking",
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      // Push GTM dataLayer event
       pushToDataLayer("book_appointment", {
+        event_category: "Conversion",
+        event_label: "Appointment Booked",
         appointment_date: selectedDay.fullDate,
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
+        zip_code: leadData?.zipCode || "",
       });
-
-      // Simulate booking (webhook will be added later)
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setIsBooked(true);
       toast.success("Appointment booked successfully!");
@@ -90,7 +114,18 @@ export default function BookingPage() {
       // Clear session storage
       sessionStorage.removeItem("leadData");
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      console.error("Webhook error:", error);
+      // Still mark as booked even if webhook fails
+      pushToDataLayer("book_appointment", {
+        event_category: "Conversion",
+        event_label: "Appointment Booked",
+        appointment_date: selectedDay.fullDate,
+        appointment_time: selectedTime,
+        project_type: leadData?.projectType || "unknown",
+      });
+      setIsBooked(true);
+      toast.success("Appointment booked successfully!");
+      sessionStorage.removeItem("leadData");
     } finally {
       setIsBooking(false);
     }

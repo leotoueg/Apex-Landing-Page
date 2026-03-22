@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 const PHONE_NUMBER = "+1 (817)-506-9696";
 const PHONE_HREF = "tel:+18175069696";
+const FORM_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/qTrXc3AYUYHnooyh3gIB/webhook-trigger/c26b38d9-061a-40fb-91ad-0990cfa7ca2b";
 
 // GTM DataLayer helper
 const pushToDataLayer = (event, data = {}) => {
@@ -93,10 +94,29 @@ export default function LandingPage() {
     setIsSubmitting(true);
 
     try {
-      // Push GTM event
+      // Send to webhook
+      await fetch(FORM_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          zipCode: formData.zipCode,
+          projectType: formData.projectType,
+          source: "apex-bath-landing-page",
+          formType: "lead_capture",
+          timestamp: new Date().toISOString(),
+        }),
+      });
+
+      // Push GTM dataLayer event
       pushToDataLayer("form_submit", {
+        event_category: "Lead",
+        event_label: "Lead Form Submission",
         form_name: "lead_capture",
         project_type: formData.projectType,
+        zip_code: formData.zipCode,
       });
 
       // Store form data in sessionStorage for booking page
@@ -109,14 +129,31 @@ export default function LandingPage() {
         navigate("/booking");
       }, 1000);
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      console.error("Webhook error:", error);
+      // Still proceed even if webhook fails
+      sessionStorage.setItem("leadData", JSON.stringify(formData));
+      pushToDataLayer("form_submit", {
+        event_category: "Lead",
+        event_label: "Lead Form Submission",
+        form_name: "lead_capture",
+        project_type: formData.projectType,
+      });
+      toast.success("Thank you! Redirecting to book your consultation...");
+      setTimeout(() => {
+        navigate("/booking");
+      }, 1000);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleCallClick = () => {
-    pushToDataLayer("click_call_button", { phone_number: PHONE_NUMBER });
+    pushToDataLayer("click_call_button", {
+      event_category: "Engagement",
+      event_label: "Click to Call",
+      phone_number: PHONE_NUMBER,
+      page: "landing",
+    });
     window.location.href = PHONE_HREF;
   };
 
