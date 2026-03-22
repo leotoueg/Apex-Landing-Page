@@ -1,0 +1,291 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin } from "lucide-react";
+import { Button } from "../components/ui/button";
+import { toast } from "sonner";
+
+const PHONE_NUMBER = "+1 (817)-506-9696";
+const PHONE_HREF = "tel:+18175069696";
+
+// GTM DataLayer helper
+const pushToDataLayer = (event, data = {}) => {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event, ...data });
+};
+
+// Available time slots
+const TIME_SLOTS = ["10:00 AM", "2:00 PM", "4:00 PM", "6:00 PM"];
+
+// Generate next 7 days (Mon-Sat only)
+const getAvailableDays = () => {
+  const days = [];
+  const today = new Date();
+  let count = 0;
+  
+  while (days.length < 7) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + count);
+    const dayOfWeek = date.getDay();
+    
+    // Skip Sunday (0)
+    if (dayOfWeek !== 0) {
+      days.push({
+        date: date,
+        dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
+        dayNumber: date.getDate(),
+        monthName: date.toLocaleDateString("en-US", { month: "short" }),
+        fullDate: date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+      });
+    }
+    count++;
+  }
+  
+  return days;
+};
+
+export default function BookingPage() {
+  const navigate = useNavigate();
+  const [leadData, setLeadData] = useState(null);
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(null);
+  const [isBooking, setIsBooking] = useState(false);
+  const [isBooked, setIsBooked] = useState(false);
+  const [availableDays] = useState(getAvailableDays());
+
+  useEffect(() => {
+    // Get lead data from session storage
+    const data = sessionStorage.getItem("leadData");
+    if (data) {
+      setLeadData(JSON.parse(data));
+    }
+  }, []);
+
+  const handleCallClick = () => {
+    pushToDataLayer("click_call_button", { phone_number: PHONE_NUMBER, page: "booking" });
+    window.location.href = PHONE_HREF;
+  };
+
+  const handleBookAppointment = async () => {
+    if (!selectedDay || !selectedTime) {
+      toast.error("Please select a day and time slot");
+      return;
+    }
+
+    setIsBooking(true);
+
+    try {
+      // Push GTM event
+      pushToDataLayer("book_appointment", {
+        appointment_date: selectedDay.fullDate,
+        appointment_time: selectedTime,
+        project_type: leadData?.projectType || "unknown",
+      });
+
+      // Simulate booking (webhook will be added later)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setIsBooked(true);
+      toast.success("Appointment booked successfully!");
+
+      // Clear session storage
+      sessionStorage.removeItem("leadData");
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsBooking(false);
+    }
+  };
+
+  if (isBooked) {
+    return (
+      <div className="min-h-screen bg-[#EFF6FF] flex items-center justify-center p-4">
+        <div className="max-w-lg w-full bg-white rounded-2xl shadow-xl p-8 text-center">
+          <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-10 h-10 text-green-600" />
+          </div>
+          <h1 className="text-3xl font-bold text-[#003A75] mb-4">You're All Set!</h1>
+          <p className="text-[#475569] mb-6">
+            Your consultation is booked for <strong>{selectedDay?.fullDate}</strong> at <strong>{selectedTime}</strong>.
+          </p>
+          <p className="text-[#475569] mb-8">
+            One of our bathroom remodeling experts will contact you to confirm your appointment.
+          </p>
+          <div className="space-y-4">
+            <Button
+              onClick={handleCallClick}
+              data-testid="booked-call-button"
+              className="w-full h-12 bg-[#FF6C00] hover:bg-[#E65C00] text-white font-semibold rounded-full flex items-center justify-center gap-2"
+            >
+              <Phone className="w-5 h-5" />
+              Questions? Call {PHONE_NUMBER}
+            </Button>
+            <Button
+              onClick={() => navigate("/")}
+              variant="outline"
+              data-testid="back-home-button"
+              className="w-full h-12 border-[#003A75] text-[#003A75] hover:bg-[#003A75] hover:text-white font-semibold rounded-full"
+            >
+              Back to Home
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-[#EFF6FF]" data-testid="booking-page">
+      {/* Header */}
+      <header className="bg-[#003A75] py-4 px-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2 text-white hover:text-white/80 transition-colors"
+            data-testid="back-button"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span>Back</span>
+          </button>
+          <h2 className="text-white text-lg font-bold">Apex Bath Remodeling Pros</h2>
+          <button
+            onClick={handleCallClick}
+            className="flex items-center gap-2 text-[#FF6C00] hover:text-[#E65C00] transition-colors font-semibold"
+            data-testid="header-call-booking"
+          >
+            <Phone className="w-5 h-5" />
+            <span className="hidden sm:inline">{PHONE_NUMBER}</span>
+          </button>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-4 py-8 md:py-12">
+        {/* Page Title */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 bg-[#FF6C00]/10 text-[#FF6C00] px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <CheckCircle className="w-4 h-4" />
+            <span>Information Received!</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#003A75] mb-4">
+            You're Almost Done — Book Your Free Consultation
+          </h1>
+          <p className="text-lg text-[#475569]">
+            Choose a time that works best for you below.
+          </p>
+        </div>
+
+        {/* Lead Summary */}
+        {leadData && (
+          <div className="bg-white rounded-xl p-4 mb-8 border border-slate-200">
+            <p className="text-sm text-[#94A3B8] mb-1">Booking consultation for:</p>
+            <p className="font-semibold text-[#0F172A]">{leadData.name} • {leadData.phone}</p>
+          </div>
+        )}
+
+        {/* Urgency Message */}
+        <div className="bg-[#003A75]/5 border border-[#003A75]/20 rounded-xl p-4 mb-8">
+          <div className="flex items-start gap-3">
+            <Clock className="w-5 h-5 text-[#FF6C00] flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-semibold text-[#0F172A]">Appointments fill quickly in Dallas–Fort Worth</p>
+              <p className="text-sm text-[#475569]">Secure your spot now. Homeowners who book a consultation are prioritized for current promotions.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Calendar Section */}
+        <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+          <div className="flex items-center gap-3 mb-6">
+            <Calendar className="w-6 h-6 text-[#003A75]" />
+            <h2 className="text-xl font-bold text-[#003A75]">Select a Day</h2>
+          </div>
+
+          {/* Day Selection */}
+          <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 mb-8">
+            {availableDays.map((day, i) => (
+              <button
+                key={i}
+                onClick={() => setSelectedDay(day)}
+                data-testid={`day-slot-${i}`}
+                className={`calendar-day text-center ${
+                  selectedDay?.dayNumber === day.dayNumber ? "selected" : ""
+                }`}
+              >
+                <p className={`text-xs font-medium ${selectedDay?.dayNumber === day.dayNumber ? "text-white/80" : "text-[#94A3B8]"}`}>
+                  {day.dayName}
+                </p>
+                <p className={`text-xl font-bold ${selectedDay?.dayNumber === day.dayNumber ? "text-white" : "text-[#0F172A]"}`}>
+                  {day.dayNumber}
+                </p>
+                <p className={`text-xs ${selectedDay?.dayNumber === day.dayNumber ? "text-white/80" : "text-[#94A3B8]"}`}>
+                  {day.monthName}
+                </p>
+              </button>
+            ))}
+          </div>
+
+          {/* Time Selection */}
+          {selectedDay && (
+            <div className="animate-fade-in">
+              <div className="flex items-center gap-3 mb-4">
+                <Clock className="w-5 h-5 text-[#003A75]" />
+                <h3 className="text-lg font-bold text-[#003A75]">
+                  Available Times for {selectedDay.fullDate}
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+                {TIME_SLOTS.map((time, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedTime(time)}
+                    data-testid={`time-slot-${i}`}
+                    className={`time-slot ${selectedTime === time ? "selected" : ""}`}
+                  >
+                    {time}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Booking Summary */}
+          {selectedDay && selectedTime && (
+            <div className="bg-[#EFF6FF] rounded-xl p-4 mb-6 animate-fade-in">
+              <p className="font-semibold text-[#003A75]">Your Selected Appointment:</p>
+              <p className="text-[#475569]">{selectedDay.fullDate} at {selectedTime}</p>
+            </div>
+          )}
+
+          {/* Book Button */}
+          <Button
+            onClick={handleBookAppointment}
+            disabled={!selectedDay || !selectedTime || isBooking}
+            data-testid="book-appointment-button"
+            className="w-full h-14 text-lg font-semibold bg-[#FF6C00] hover:bg-[#E65C00] disabled:bg-slate-300 text-white rounded-full shadow-lg transition-all duration-200"
+          >
+            {isBooking ? "Booking..." : "Confirm My Appointment"}
+          </Button>
+
+          <p className="text-center text-sm text-[#94A3B8] mt-4">
+            A team member will confirm your appointment via phone or text.
+          </p>
+        </div>
+
+        {/* Location Info */}
+        <div className="mt-8 text-center">
+          <div className="flex items-center justify-center gap-2 text-[#475569]">
+            <MapPin className="w-5 h-5 text-[#FF6C00]" />
+            <span>Serving Dallas–Fort Worth & surrounding areas in North Central Texas</span>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-[#003A75] py-6 px-4 mt-12">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-white/70 text-sm">© {new Date().getFullYear()} Apex Bath Remodeling Pros. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
