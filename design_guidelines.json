@@ -1,0 +1,146 @@
+{
+  "theme": "light",
+  "typography": {
+    "fonts": {
+      "headings": "'Playfair Display', serif",
+      "body": "'Outfit', sans-serif"
+    },
+    "rules": [
+      "Headings must use Playfair Display with tracking-tight (-0.025em)",
+      "Body text must use Outfit with leading-relaxed",
+      "Overlines/labels must be Uppercase + Tiny + tracking-widest",
+      "Do NOT use Inter or Roboto. Import fonts via Google Fonts in CSS."
+    ]
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "#003A75",
+      "hover": "#002855",
+      "foreground": "#FFFFFF"
+    },
+    "accent": {
+      "DEFAULT": "#FF6C00",
+      "hover": "#E65C00",
+      "foreground": "#FFFFFF"
+    },
+    "background": "#FFFFFF",
+    "surface": "#F8FAFC",
+    "surface_alt": "#EFF6FF",
+    "text": {
+      "primary": "#0F172A",
+      "secondary": "#475569",
+      "muted": "#94A3B8"
+    },
+    "rules": [
+      "Use #003A75 as the structural anchor (Headers, Footers, Section backgrounds)",
+      "Use #FF6C00 EXCLUSIVELY for high-priority CTAs (Form submit, Call Now) to maximize conversion",
+      "Maintain at least 4.5:1 contrast ratio for text",
+      "Tint all grays with a touch of blue (slate) to match the brand"
+    ]
+  },
+  "visual_enhancers": {
+    "borders": "1px solid border-slate-200 for cards, slightly rounded (rounded-xl)",
+    "shadows": "Deep ambient shadows (shadow-xl) for floating elements like the sticky bar and main lead form to create depth",
+    "textures": "Use subtle SVG noise overlays on the dark blue primary backgrounds to add depth without looking 'techy'.",
+    "glassmorphism": "Use backdrop-blur-md bg-white/90 for the sticky mobile CTA bar and fixed navigation. Never use complete transparent backgrounds behind text."
+  },
+  "grids_and_layouts": {
+    "hero": "Asymmetric split layout. Left: Value prop, Offer, Trust badges. Right: The Lead Capture Form overlapping the hero background or video.",
+    "process": "3-column Bento grid (md:grid-cols-3 gap-8) with prominent numbering (1, 2, 3) using Playfair Display in huge size (text-8xl) with low opacity (opacity-10).",
+    "showcase": "Masonry or asymmetric grid (md:grid-cols-3) mixing portrait and landscape crops of the provided project images. Overlap images slightly for a 'magazine' feel.",
+    "spacing": "Generous vertical padding between sections (py-24 or py-32). Container padding (px-4 md:px-8 max-w-7xl mx-auto)."
+  },
+  "motion": {
+    "hover_states": "-translate-y-1, shadow-lg, and slight brightness increase on buttons",
+    "scroll_reveal": "Use framer-motion to stagger the entrance of bento grid items, social proof, and showcase images (y: 20, opacity: 0 -> y: 0, opacity: 1)",
+    "micro_interactions": "Smooth transitions (transition-colors duration-300 ease-out) on inputs and form focus states"
+  },
+  "accessibility": {
+    "contrast": "Ensure white text on the #FF6C00 accent button passes contrast. Use a bold weight for the CTA text.",
+    "aria": "Add aria-labels to all click-to-call buttons and the Wistia iframe",
+    "focus": "focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+  },
+  "components": {
+    "lead_capture_form": "Card-based form above the fold. Fields: Name, Phone, Email, Zip, Project Type (Dropdown). Submit button is massive, orange (#FF6C00), and says 'Get My $2,500 Off Free Quote'.",
+    "sticky_mobile_bar": "Fixed bottom bar on mobile only (md:hidden) containing two buttons: 'Call Now' (Blue) and 'Get Quote' (Orange). Z-index 50.",
+    "booking_calendar": "A clean view showing dates (Mon-Sat) and 4 pill-shaped time slots (10AM, 2PM, 4PM, 6PM) per day. Filter out Sundays. Built using standard divs/buttons.",
+    "wistia_video": "Embed Wistia player iframe in the hero section or immediately below. Needs 'aspect-video rounded-2xl overflow-hidden shadow-2xl'."
+  },
+  "media": {
+    "project_images": [
+      {
+        "url": "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/faj5e6d5_ap1.webp",
+        "category": "showcase"
+      },
+      {
+        "url": "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/a6taw48b_ap2.webp",
+        "category": "showcase"
+      },
+      {
+        "url": "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/bjsu0y72_ap3.jpg",
+        "category": "showcase"
+      },
+      {
+        "url": "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/kazms9fd_ap4.webp",
+        "category": "showcase"
+      },
+      {
+        "url": "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/hp0gixk3_ap5.webp",
+        "category": "showcase"
+      }
+    ],
+    "hero_fallback": {
+      "url": "https://images.unsplash.com/photo-1758548157466-7c454382035a?crop=entropy&cs=srgb&fm=jpg&q=85",
+      "category": "hero_background"
+    },
+    "testimonial_faces": [
+      {
+        "url": "https://images.pexels.com/photos/7578967/pexels-photo-7578967.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=150&w=150",
+        "category": "testimonial"
+      },
+      {
+        "url": "https://images.pexels.com/photos/7579360/pexels-photo-7579360.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=150&w=150",
+        "category": "testimonial"
+      }
+    ],
+    "icons": "Use lucide-react (Phone, CheckCircle, Star, Calendar, Shield, Award, MapPin)."
+  },
+  "gtm_events": [
+    "form_submit",
+    "click_call_button",
+    "book_appointment"
+  ],
+  "instructions_to_main_agent": [
+    "Build a multi-page routing structure or conditional render for the landing page '/' and booking page '/booking'.",
+    "Use react-router-dom or standard conditional state to show the booking page immediately after form submission without a hard reload.",
+    "Implement the Lead Capture Form ABOVE the fold on the main page. This is critical for Google Ads Quality Score and conversions.",
+    "Use standard HTML forms integrated with Shadcn Input/Select components. Do NOT use native raw <select>.",
+    "Wistia embed code should be a standard <iframe> with muted autoplay attributes.",
+    "The Booking calendar on the second page should list out the next 7 days. When a day is clicked, show slots: 10AM, 2PM, 4PM, 6PM. Filter out Sundays.",
+    "Include window.dataLayer = window.dataLayer || []; and push events: window.dataLayer.push({event: 'form_submit'}); upon success.",
+    "Implement the Sticky Mobile Bar component that only shows on max-w-md screens.",
+    "Do NOT center align the main application container. Left-align text for better reading flow.",
+    "Use generic placeholder names and realistic dummy text for testimonials.",
+    "DO NOT use Inter, Roboto, or generic fonts for the headings. Import 'Outfit' and 'Playfair Display' from Google Fonts in index.css.",
+    "Include data-testid attributes on all interactive elements: inputs, submit buttons, call buttons, calendar slots.",
+    "Ensure the layout is highly responsive. The form should stack neatly on mobile and sit side-by-side with hero text/video on desktop.",
+    "To maximize SEO and Ad Quality Score, integrate relevant keywords (DFW Bathroom Remodel, Shower Replacement, etc.) natively into Headings."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. In frontend design, this creates what users call the 'AI slop' aesthetic. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: `transition: all`. Always add transitions for specific interactive elements.",
+    "You MUST NOT center align the app container, ie do not add `.App { text-align: center; }` in the css file. This disrupts the human natural reading flow of text.",
+    "Always use modern button styles like pill-shaped, or sharp button with interaction animations & color relevant to the app style.",
+    "NEVER use AI assistant Emoji characters for icons.",
+    "Every interaction needs micro-animations - hover states, transitions, parallax effects, and entrance animations. Static = dead.",
+    "Use 2-3x more spacing than feels comfortable. Cramped designs look cheap.",
+    "Prioritize using pre-existing components from src/components/ui when applicable.",
+    "Components MUST use named exports, Pages MUST use default exports.",
+    "Use 'sonner' for toasts.",
+    "Ensure all fonts are imported into index.html or index.css (e.g., @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');)."
+  ]
+}
