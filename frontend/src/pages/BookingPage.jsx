@@ -88,7 +88,7 @@ export default function BookingPage() {
           name: leadData?.name || "",
           phone: leadData?.phone || "",
           email: leadData?.email || "",
-          zipCode: leadData?.zipCode || "",
+          address: leadData?.address || "",
           projectType: leadData?.projectType || "",
           appointmentDate: selectedDay.fullDate,
           appointmentTime: selectedTime,
@@ -105,7 +105,6 @@ export default function BookingPage() {
         appointment_date: selectedDay.fullDate,
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
-        zip_code: leadData?.zipCode || "",
       });
 
       setIsBooked(true);

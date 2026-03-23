@@ -53,7 +53,7 @@ export default function LandingPage() {
     name: "",
     phone: "",
     email: "",
-    zipCode: "",
+    address: "",
     projectType: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -90,7 +90,7 @@ export default function LandingPage() {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.phone || !formData.email || !formData.zipCode || !formData.projectType) {
+    if (!formData.name || !formData.phone || !formData.email || !formData.address || !formData.projectType) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -106,7 +106,7 @@ export default function LandingPage() {
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
-          zipCode: formData.zipCode,
+          address: formData.address,
           projectType: formData.projectType,
           source: "apex-bath-landing-page",
           formType: "lead_capture",
@@ -120,7 +120,6 @@ export default function LandingPage() {
         event_label: "Lead Form Submission",
         form_name: "lead_capture",
         project_type: formData.projectType,
-        zip_code: formData.zipCode,
       });
 
       // Store form data in sessionStorage for booking page
@@ -296,15 +295,15 @@ export default function LandingPage() {
                 </div>
 
                 <div>
-                  <Label htmlFor="zipCode" className="text-[#0F172A] font-medium">Zip Code</Label>
+                  <Label htmlFor="address" className="text-[#0F172A] font-medium">Address</Label>
                   <Input
-                    id="zipCode"
-                    name="zipCode"
+                    id="address"
+                    name="address"
                     type="text"
-                    placeholder="75001"
-                    value={formData.zipCode}
+                    placeholder="123 Main St, Dallas, TX"
+                    value={formData.address}
                     onChange={handleInputChange}
-                    data-testid="input-zipcode"
+                    data-testid="input-address"
                     className="mt-1 h-12 border-slate-200 focus:border-[#FF6C00]"
                   />
                 </div>
