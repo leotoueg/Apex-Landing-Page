@@ -15,15 +15,15 @@ const pushToDataLayer = (event, data = {}) => {
 };
 
 // Available time slots
-const TIME_SLOTS = ["10:00 AM", "2:00 PM", "4:00 PM", "6:00 PM"];
+const TIME_SLOTS = ["10:00 AM", "2:00 PM", "6:00 PM"];
 
-// Generate next 7 days (Mon-Sat only)
+// Generate next 4 days (Mon-Sat only)
 const getAvailableDays = () => {
   const days = [];
   const today = new Date();
   let count = 0;
   
-  while (days.length < 7) {
+  while (days.length < 4) {
     const date = new Date(today);
     date.setDate(today.getDate() + count);
     const dayOfWeek = date.getDay();
@@ -235,7 +235,7 @@ export default function BookingPage() {
           </div>
 
           {/* Day Selection */}
-          <div className="grid grid-cols-4 sm:grid-cols-7 gap-3 mb-8">
+          <div className="grid grid-cols-4 gap-3 mb-8">
             {availableDays.map((day, i) => (
               <button
                 key={i}
@@ -268,7 +268,7 @@ export default function BookingPage() {
                 </h3>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+              <div className="grid grid-cols-3 gap-3 mb-8">
                 {TIME_SLOTS.map((time, i) => (
                   <button
                     key={i}

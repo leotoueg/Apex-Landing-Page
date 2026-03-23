@@ -27,13 +27,16 @@ const projectImages = [
   { url: "https://customer-assets.emergentagent.com/job_apex-bath-pros/artifacts/hp0gixk3_ap5.webp", alt: "Spa-like bathroom with freestanding tub" },
 ];
 
-// Testimonials
+// Testimonials - Real Google Reviews
 const testimonials = [
-  { name: "Michael R.", location: "Fort Worth, TX", text: "They delivered everything exactly as promised. Our bathroom looks incredible and the team was so professional. Highly recommend for any remodel!", rating: 5 },
-  { name: "Susan T.", location: "Dallas, TX", text: "Professional, clean, and so easy to work with. They completed our master bath remodel faster than expected. We couldn't be happier!", rating: 5 },
-  { name: "James & Linda P.", location: "Arlington, TX", text: "Completed our bathroom in just 3 days! We expected weeks of disruption but they were efficient and thorough. Outstanding work.", rating: 5 },
-  { name: "Patricia M.", location: "Plano, TX", text: "They helped us make the bathroom safer for my elderly mother with grab bars and a walk-in shower. Thoughtful and caring team.", rating: 5 },
-  { name: "Robert K.", location: "Irving, TX", text: "Honest, no-pressure experience from start to finish. They showed us options and let us decide. The final result exceeded expectations.", rating: 5 },
+  { name: "Phillip Chapman", location: "Google Review", text: "Great price. FIVE BIG STARS for Stephen and the guys at Apex Bath and Remodeling. He responded quickly and took care of my bathroom problem. STRONGLY recommend.", rating: 5 },
+  { name: "Clint Roberts", location: "Google Review", text: "Reasonable price. We haven't been in metroplex to long but the wonderful people i go to church with heard we needed to get our bathroom remodel and gave us a recommendation, apex wow no pressure, very informative. Not apex it just felt right and I believe in divine intervention cause they finished our bathroom. We are safe and I know Steven and his team care. THANK YOU FOR MEETING MY EXPECTATIONS.", rating: 5 },
+  { name: "Kristi Roberts", location: "Google Review", text: "We where so close to giving up on finding a solid company to trust our project with went to four big companies with showrooms thinking that's a great place to start. Sometimes that's how God works a friend told us about apex bath and remodeling from start to finish best experience we have ever had don't waste your time with anyone else love steve and his team phenomenal experts.", rating: 5 },
+  { name: "Frank Dowler", location: "Google Review", text: "Never ever have we had to do a bathroom project before was a little bit nervous because my mom cannot get in and out of a bathtub anymore not safely anyhow. Thank God we found Apex bathroom and remodeling. Steve and his team are the most professional people we've ever met and the workmanship that they did was next level. I feel good knowing that my mom is going to be safe. Thank you Apex for caring about me and my mom.", rating: 5 },
+  { name: "Carlos Jones", location: "Google Review", text: "My new apex bathroom is absolutely stunning, they completed all the work in two days. The last time we remodeled they claimed to be efficient taking weeks vs 2 days. We get back to our lives in only two days and it's beautiful exactly how we imagined it. Thank you Steve we love you and your entire team.", rating: 5 },
+  { name: "Irene Romero", location: "Google Review", text: "My parents needed a lot of help due to the fact that they are getting older. Apex were extremely patient with both of them, they are both hard of hearing. Anyhow they got what they needed to be safe. I am so relieved thank you apex. You have been a lifesaver.", rating: 5 },
+  { name: "Danion Moseby", location: "Google Review", text: "We met apex when they were installing our neighbors home, they did beautiful work very professional clean. We hired them and so glad we did something the universe just takes care of you. Love Steve and Joe what a great team my mom will be next. Thank you guys.", rating: 5 },
+  { name: "Robert", location: "Google Review", text: "Apex did a great job! They gave me a great offer, remodeled my master bathroom. From start to finish they delivered everything they promised. Highly recommend!", rating: 5 },
 ];
 
 // FAQ items
@@ -389,15 +392,15 @@ export default function LandingPage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.slice(0, 3).map((testimonial, i) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {testimonials.slice(0, 4).map((testimonial, i) => (
               <div key={i} className="testimonial-card" data-testid={`testimonial-${i}`}>
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, j) => (
                     <Star key={j} className="w-5 h-5 fill-[#FF6C00] text-[#FF6C00]" />
                   ))}
                 </div>
-                <p className="text-[#475569] mb-4 leading-relaxed">"{testimonial.text}"</p>
+                <p className="text-[#475569] mb-4 leading-relaxed text-sm">"{testimonial.text}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#003A75] flex items-center justify-center text-white font-semibold">
                     {testimonial.name.charAt(0)}
@@ -411,15 +414,15 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mt-6 max-w-4xl mx-auto">
-            {testimonials.slice(3).map((testimonial, i) => (
-              <div key={i + 3} className="testimonial-card" data-testid={`testimonial-${i + 3}`}>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            {testimonials.slice(4).map((testimonial, i) => (
+              <div key={i + 4} className="testimonial-card" data-testid={`testimonial-${i + 4}`}>
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, j) => (
                     <Star key={j} className="w-5 h-5 fill-[#FF6C00] text-[#FF6C00]" />
                   ))}
                 </div>
-                <p className="text-[#475569] mb-4 leading-relaxed">"{testimonial.text}"</p>
+                <p className="text-[#475569] mb-4 leading-relaxed text-sm">"{testimonial.text}"</p>
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-[#003A75] flex items-center justify-center text-white font-semibold">
                     {testimonial.name.charAt(0)}
