@@ -237,7 +237,7 @@ export default function LandingPage() {
                       padding-top: 56.25%;
                     }
                   `}} />
-                  <wistia-player media-id="1q05d4qp3c" aspect="1.7777777777777777" autoplay="true" muted="true"></wistia-player>
+                  <wistia-player media-id="1q05d4qp3c" aspect="1.7777777777777777"></wistia-player>
                 </div>
               </div>
             </div>
@@ -349,7 +349,7 @@ export default function LandingPage() {
                   padding-top: 56.25%;
                 }
               `}} />
-              <wistia-player media-id="1q05d4qp3c" aspect="1.7777777777777777" autoplay="true" muted="true"></wistia-player>
+              <wistia-player media-id="1q05d4qp3c" aspect="1.7777777777777777"></wistia-player>
             </div>
           </div>
         </div>
